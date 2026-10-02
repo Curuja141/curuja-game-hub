@@ -1,3 +1,3 @@
 - [x] Establish editable content and original mascot.
 - [x] Build the one-page sections and interactions.
-- [ ] Verify desktop and mobile rendering and contact flow.
+- [x] Verify desktop and mobile rendering and contact flow.
