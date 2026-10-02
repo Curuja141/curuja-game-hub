@@ -295,6 +295,7 @@ a, button, select { cursor: pointer; }
 
 /* Quiet monochrome arcade: restrained strokes, neutral surfaces, and small game cues. */
 body { font-family: "Manrope", sans-serif; background: var(--ink); color: var(--cream); }
+:focus-visible { outline: 2px solid var(--cream) !important; box-shadow: 0 0 0 4px var(--ink) !important; outline-offset: 2px; }
 .pixel-label { font: 500 11px/1.6 "IBM Plex Mono", monospace; letter-spacing: 0; }
 .section-pad { padding-block: 112px; }
 .cartoon-border { border-width: 1px; border-color: var(--line); border-radius: 6px; }
