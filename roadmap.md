@@ -1,3 +1,4 @@
 - [x] Establish editable content and original mascot.
 - [x] Build the one-page sections and interactions.
 - [x] Verify desktop and mobile rendering and contact flow.
+- [ ] Apply the selected electric-violet graphite direction and verify it on desktop and mobile.
