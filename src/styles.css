@@ -454,6 +454,7 @@ body { font-family: "Work Sans", sans-serif; }
 .video-card:hover, .service-card:hover, .achievement:not(.locked):hover { border-color: var(--grape); }
 .video-card { border-top: 2px solid var(--grape); }
 .level-chip, .service-number, .achievement-state, .inventory-title .pixel-label, .process-copy .pixel-label, .profile-name .pixel-label { color: var(--violet-soft); }
+.video-category, .process-copy .pixel-label, .profile-stats strong { font-size: 10px; }
 .play-button, .play-button:hover { background: var(--grape); color: var(--ink); }
 .filter-button.selected { background: var(--grape); color: var(--ink); border-color: var(--grape); }
 .card-arrow:hover { background: var(--grape); color: var(--ink); border-color: var(--grape); }
@@ -461,6 +462,7 @@ body { font-family: "Work Sans", sans-serif; }
 .checkpoint, .process-step:nth-child(n) .checkpoint { border-color: var(--grape); color: var(--violet-soft); }
 .service-cta, .service-cta:hover { background: var(--grape); color: var(--ink); }
 .service-cta:hover { background: var(--violet-soft); }
+.service-card h3 { line-height: 1.15; }
 .profile-portrait { border-color: var(--grape); }
 .profile-portrait svg { filter: grayscale(1) drop-shadow(5px 5px 0 var(--violet-tint)); }
 .class-tag, .form-header { border-color: var(--grape); }
@@ -474,6 +476,8 @@ body { font-family: "Work Sans", sans-serif; }
   .hero-main { display: flex; }
   .hero-copy h1 { font-size: clamp(53px, 14.5vw, 94px); line-height: 1.1; }
   .hero-character::before { inset: 12% 10% 17%; }
+  .profile-portrait { min-height: 360px; }
+  .process-copy { min-height: 0; }
   .section-heading { column-gap: 12px; }
   .section-heading h2 { font-size: clamp(27px,8vw,42px); }
   .section-heading::before { display: none; }
@@ -481,5 +485,5 @@ body { font-family: "Work Sans", sans-serif; }
   .section-heading::after { grid-column: 2; }
   .retro-tv { border-width: 3px; box-shadow: 7px 7px 0 var(--surface); }
 }
-@media (max-width: 370px) { .hero-copy h1 { font-size: 48px; } }
+@media (max-width: 370px) { .hero-copy h1 { font-size: 48px; }.service-card h3 { font-size: 24px; } }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }.reveal { opacity: 1; translate: none; } }
