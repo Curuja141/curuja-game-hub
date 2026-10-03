@@ -11,6 +11,7 @@ import { About } from "@/components/portfolio/About";
 import { Contact } from "@/components/portfolio/Contact";
 import { Footer } from "@/components/portfolio/Footer";
 import { RevealObserver } from "@/components/portfolio/GamePieces";
+import { CinemaProvider } from "@/components/portfolio/Cinema";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,5 +30,5 @@ export const Route = createFileRoute("/")({
 });
 function Index() {
   const [selectedService, setSelectedService] = useState("");
-  return <><RevealObserver/><Navbar/><main><Hero/><Portfolio/><Skills/><Services onSelect={setSelectedService}/><Process/><About/><Contact selectedService={selectedService}/></main><Footer/><Toaster position="bottom-right" richColors/></>;
+  return <CinemaProvider><RevealObserver/><Navbar/><main><Hero/><Portfolio/><Skills/><Services onSelect={setSelectedService}/><Process/><About/><Contact selectedService={selectedService}/></main><Footer/><Toaster position="bottom-right" richColors/></CinemaProvider>;
 }

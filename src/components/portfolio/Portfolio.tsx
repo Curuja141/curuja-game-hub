@@ -1,17 +1,76 @@
-import { useState } from "react";
-import { Play, X } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { videos, xEmbedUrl, xPostUrl, type Video } from "@/data/videos";
+import { useEffect, useRef, useState } from "react";
+import { ListVideo, Play, Volume2 } from "lucide-react";
+import { videos, type Video } from "@/data/videos";
 import { ArcadeButton, SectionHeading } from "./GamePieces";
+import { useCinema } from "./Cinema";
 
-function VideoCard({ video, index, onOpen }: { video: Video; index: number; onOpen: (video: Video) => void }) {
-  return <article className="video-card reveal sticker"><div className="video-thumb">{video.youtubeId ? <img src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`} alt={`Thumbnail for ${video.title}`} loading="lazy"/> : <div className={`placeholder-art placeholder-art-${index % 3}`} aria-label="Video thumbnail placeholder"><span className="placeholder-sun"/><span className="placeholder-mountain"/><span className="placeholder-grid"/></div>}<span className="level-chip">LEVEL {video.id}</span><ArcadeButton className="play-button" aria-label={`Play ${video.title}`} onClick={() => onOpen(video)}><Play fill="currentColor" size={26}/></ArcadeButton></div><div className="video-details"><div><span className="video-category">{video.category}</span><h3>{video.title}</h3></div><ArcadeButton className="card-arrow" aria-label={`Open ${video.title}`} onClick={() => onOpen(video)}>↗</ArcadeButton></div></article>;
+function VideoCard({ video, index }: { video: Video; index: number }) {
+  const { open, isOpen } = useCinema();
+  const cardRef = useRef<HTMLElement>(null);
+  const previewRef = useRef<HTMLVideoElement>(null);
+  const [pointerOn, setPointerOn] = useState(false); // mouse is over the card, or it has keyboard focus
+  const [inView, setInView] = useState(false); // touch screens: preview plays while the card is on screen
+  const previewing = (pointerOn || inView) && !isOpen;
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card || !("IntersectionObserver" in window)) return;
+    const touchOnly = window.matchMedia("(hover: none)").matches;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!touchOnly || reduceMotion) return;
+    const observer = new IntersectionObserver(entries => setInView((entries[0]?.intersectionRatio ?? 0) >= 0.7), { threshold: [0, 0.7, 1] });
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const element = previewRef.current;
+    if (!element) return;
+    if (previewing) {
+      element.play().catch(() => undefined);
+    } else {
+      element.pause();
+      element.currentTime = 0;
+    }
+  }, [previewing]);
+
+  return <article
+    ref={cardRef}
+    className="video-card reveal sticker"
+    data-previewing={previewing ? "true" : undefined}
+    onPointerEnter={(event) => { if (event.pointerType === "mouse") setPointerOn(true); }}
+    onPointerLeave={(event) => { if (event.pointerType === "mouse") setPointerOn(false); }}
+    onFocus={() => setPointerOn(true)}
+    onBlur={() => setPointerOn(false)}
+    onClick={(event) => { if (!(event.target as HTMLElement).closest("button")) open(index); }}
+  >
+    <div className="video-thumb">
+      <video ref={previewRef} className="preview-video" src={video.preview} poster={video.poster} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1}/>
+      <button type="button" className="video-open" onClick={() => open(index)} aria-label={`Watch ${video.title} with sound`}/>
+      <span className="level-chip">LEVEL {video.id}</span>
+      {index === 0 && <span className="video-flag">FEATURED</span>}
+      <span className="play-badge" aria-hidden="true"><Play fill="currentColor" size={26}/></span>
+      <span className="video-hint" aria-hidden="true"><Volume2 size={13}/> PLAY WITH SOUND</span>
+      <span className="video-time">{video.duration}</span>
+    </div>
+    <div className="video-details"><div><span className="video-category">{video.category}</span><h3>{video.title}</h3>{video.description && <p className="video-blurb">{video.description}</p>}</div></div>
+  </article>;
 }
 
 export function Portfolio() {
   const [category, setCategory] = useState("ALL");
-  const [selected, setSelected] = useState<Video | null>(null);
+  const { open } = useCinema();
   const categories = ["ALL", ...new Set(videos.map(video => video.category))];
   const filtered = category === "ALL" ? videos : videos.filter(video => video.category === category);
-  return <section id="portfolio" className="portfolio-section halftone section-pad"><div className="page-container"><SectionHeading eyebrow="// LEVEL SELECT" title="SELECT YOUR LEVEL" subtitle="Pick a video and hit play."/>{categories.length > 2 && <div className="filter-row" role="group" aria-label="Filter videos by category">{categories.map(item => <ArcadeButton key={item} className={`filter-button ${category === item ? "selected" : ""}`} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</ArcadeButton>)}</div>}<div className="video-grid">{filtered.map((video, index) => <VideoCard key={video.id} video={video} index={index} onOpen={setSelected}/>)}</div><p className="portfolio-note">MORE LEVELS COMING SOON <span aria-hidden="true">✦</span></p></div><Dialog open={selected !== null} onOpenChange={(open) => { if (!open) setSelected(null); }}><DialogContent className="video-dialog" aria-describedby="video-description" onOpenAutoFocus={(event) => { event.preventDefault(); (event.currentTarget as HTMLElement | null)?.focus(); }}><DialogTitle className="dialog-title">{selected?.title}</DialogTitle><DialogDescription id="video-description" className="dialog-description">{selected?.description || selected?.category}</DialogDescription><div className="dialog-video" style={selected?.xPostId && !selected.youtubeId ? { aspectRatio: "auto", height: "min(620px, 70vh)" } : undefined}>{selected?.youtubeId ? <iframe src={`https://www.youtube-nocookie.com/embed/${selected.youtubeId}?autoplay=1`} title={selected.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/> : selected?.xPostId ? <iframe src={xEmbedUrl(selected.xPostId)} title={selected.title} allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowFullScreen style={{ maxWidth: 600, margin: "0 auto" }}/> : <div className="dialog-placeholder"><Play size={44}/><p>VIDEO COMING SOON</p><span>Add a YouTube ID or an X post ID to play this project.</span></div>}</div><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>{selected?.xPostId ? <ArcadeButton asChild className="button-cream"><a href={xPostUrl(selected.xPostId)} target="_blank" rel="noopener noreferrer">WATCH ON X ↗</a></ArcadeButton> : <span/>}<ArcadeButton className="button-sunny dialog-close" onClick={() => setSelected(null)}><X size={18}/> CLOSE</ArcadeButton></div></DialogContent></Dialog></section>;
+  return <section id="portfolio" className="portfolio-section halftone section-pad">
+    <div className="page-container">
+      <SectionHeading eyebrow="// LEVEL SELECT" title="SELECT YOUR LEVEL" subtitle="Pick an edit to watch it full screen, with sound."/>
+      <div className="portfolio-toolbar">
+        {categories.length > 2 ? <div className="filter-row" role="group" aria-label="Filter videos by category">{categories.map(item => <ArcadeButton key={item} className={`filter-button ${category === item ? "selected" : ""}`} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</ArcadeButton>)}</div> : <span/>}
+        <ArcadeButton className="play-all" onClick={() => open(0, { playAll: true })}><ListVideo size={18}/> PLAY ALL ({videos.length})</ArcadeButton>
+      </div>
+      <div className="video-grid">{filtered.map(video => <VideoCard key={video.id} video={video} index={videos.indexOf(video)}/>)}</div>
+      <p className="portfolio-note">MORE LEVELS COMING SOON <span aria-hidden="true">✦</span></p>
+    </div>
+  </section>;
 }
