@@ -2,3 +2,4 @@
 - [x] Build the one-page sections and interactions.
 - [x] Verify desktop and mobile rendering and contact flow.
 - [x] Apply the selected electric-violet graphite direction and verify it on desktop and mobile.
+- [ ] Apply the selected cinematic editorial direction in deep eggplant and verify desktop and mobile.
