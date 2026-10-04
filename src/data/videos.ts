@@ -18,9 +18,9 @@ export const xPostUrl = (postId: string) => `https://x.com/CurujaEdits/status/${
 export const videos: Video[] = [
   {
     id: "01",
-    title: "I Bought The FASTEST Horse and Made MILLIONS in Roblox",
-    category: "Gameplay Edits",
-    description: "Bold captions, zooms and quick transitions for a Roblox horse-racing video.",
+    title: "Roblox Fastest Horse Re-edit",
+    category: "Re-edits",
+    description: "Re-edit of a Roblox horse-racing video, with bold captions, zooms and quick transitions.",
     src: "/videos/roblox-fastest-horse.mp4",
     preview: "/videos/roblox-fastest-horse-preview.mp4",
     poster: "/videos/roblox-fastest-horse-poster.jpg",
@@ -28,9 +28,9 @@ export const videos: Video[] = [
   },
   {
     id: "02",
-    title: "Minecraft But You Enchant Every Second 2",
-    category: "Gameplay Edits",
-    description: "Before vs. after: raw gameplay next to the finished edit, with captions and timer graphics.",
+    title: "Minecraft Enchant Every Second Re-edit 2",
+    category: "Re-edits",
+    description: "Re-edit shown before vs. after: raw gameplay next to the finished edit, with captions and timer graphics.",
     src: "/videos/minecraft-enchant-every-second.mp4",
     preview: "/videos/minecraft-enchant-every-second-preview.mp4",
     poster: "/videos/minecraft-enchant-every-second-poster.jpg",
@@ -38,9 +38,9 @@ export const videos: Video[] = [
   },
   {
     id: "03",
-    title: "Ben 10 Re-edit 2",
+    title: "Ben 10 x Minecraft Re-edit 2",
     category: "Re-edits",
-    description: "Animated title cards and character name tags in a Ben 10 x Minecraft re-edit.",
+    description: "Re-edit with animated title cards and character name tags, bringing Ben 10 into Minecraft.",
     src: "/videos/ben10-reedit.mp4",
     preview: "/videos/ben10-reedit-preview.mp4",
     poster: "/videos/ben10-reedit-poster.jpg",
