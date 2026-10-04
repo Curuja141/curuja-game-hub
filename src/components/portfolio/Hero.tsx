@@ -35,11 +35,12 @@ function TvPlayer() {
       <video key={video.id} ref={screen} className="tv-video" src={video.preview} poster={video.poster} autoPlay={!reduceMotion} muted loop playsInline preload="auto" aria-hidden="true" tabIndex={-1}/>
       {flash > 0 && <div key={flash} className="tv-flash" aria-hidden="true"/>}
       <button type="button" className="tv-hit" onClick={() => open(channel)} aria-label={`Watch ${video.title} with sound`}>
-        <span className="tv-hit-label"><Play size={16} fill="currentColor"/> WATCH FULL EDIT <small>with sound</small></span>
+        <span className="tv-play" aria-hidden="true"><Play size={26} fill="currentColor"/></span>
       </button>
     </div>
     <div className="tv-controls">
-      <div><span className="tv-light"/><span className="tv-now">NOW PLAYING: {video.title}</span></div>
+      <button type="button" className="tv-watch" onClick={() => open(channel)}><Play size={15} fill="currentColor"/> WATCH FULL EDIT</button>
+      <span className="tv-now"><span className="tv-light"/><span className="tv-title">NOW PLAYING: {video.title}</span></span>
       <div className="tv-channels" role="group" aria-label="Choose an edit"><span aria-hidden="true">CH</span>{videos.map((item, i) => <button key={item.id} type="button" className="tv-channel" aria-pressed={i === channel} aria-label={`Channel ${i + 1}: ${item.title}`} onClick={() => changeChannel(i)}>{i + 1}</button>)}</div>
     </div>
   </>;

@@ -492,13 +492,8 @@ body { font-family: "Work Sans", sans-serif; }
 .tv-screen { position: relative; overflow: hidden; background: var(--ink); }
 .tv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .tv-hit { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.tv-hit-label { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--grape); color: var(--ink); border: 1px solid var(--grape); border-radius: 3px; font: 800 12px/1.2 "JetBrains Mono", monospace; transition: transform .18s ease, background .18s ease; }
-.tv-hit-label small { font: 500 10px/1 "JetBrains Mono", monospace; opacity: .75; }
-.tv-hit:hover .tv-hit-label, .tv-hit:focus-visible .tv-hit-label { background: var(--violet-soft); transform: translateY(-2px); }
 .tv-flash { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(242,241,239,.2) 0 2px, rgba(29,30,34,.6) 2px 4px), var(--surface-raised); animation: tv-flash .32s steps(4) forwards; }
 @keyframes tv-flash { from { opacity: 1; } to { opacity: 0; } }
-.tv-controls > div:first-child { min-width: 0; }
-.tv-now { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tv-channels { display: flex; align-items: center; gap: 8px; flex: none; margin-left: 14px; }
 .tv-channels > span { color: var(--muted-text); font: 500 10px "JetBrains Mono", monospace; margin-right: 2px; }
 .tv-channel { width: 38px; height: 38px; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 3px; background: var(--surface-raised); color: var(--cream); font: 700 13px "JetBrains Mono", monospace; cursor: pointer; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
@@ -514,16 +509,10 @@ body { font-family: "Work Sans", sans-serif; }
 .video-card .video-details h3 { font-size: 20px; line-height: 1.25; }
 .video-blurb { margin: 8px 0 0; color: var(--muted-text); font: 400 14px/1.45 "Work Sans", sans-serif; }
 .video-thumb { background: var(--ink); }
-.preview-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .video-open { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.video-thumb .level-chip { z-index: 2; pointer-events: none; }
 .play-badge { position: absolute; z-index: 2; top: 50%; left: 50%; width: 62px; height: 62px; display: grid; place-items: center; border-radius: 50%; background: var(--grape); color: var(--ink); transform: translate(-50%, -50%); pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
 .video-card:hover .play-badge { transform: translate(-50%, -50%) scale(1.08); }
 .video-card[data-previewing] .play-badge { opacity: 0; transform: translate(-50%, -50%) scale(.8); }
-.video-time, .video-hint, .video-flag { position: absolute; z-index: 2; pointer-events: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; background: rgba(29,30,34,.88); border: 1px solid var(--line); border-radius: 3px; color: var(--cream); font: 600 10px/1 "JetBrains Mono", monospace; }
-.video-time { right: 10px; bottom: 10px; }
-.video-hint { left: 10px; bottom: 10px; color: var(--violet-soft); opacity: 0; transform: translateY(4px); transition: opacity .2s ease, transform .2s ease; }
-.video-card:hover .video-hint, .video-card:focus-within .video-hint, .video-card[data-previewing] .video-hint { opacity: 1; transform: none; }
 .video-flag { right: 10px; top: 10px; background: var(--grape); border-color: var(--grape); color: var(--ink); font-weight: 800; }
 
 .video-dialog.cinema-dialog { width: min(96vw, 1120px); max-width: 1120px; max-height: 96vh; overflow-y: auto; padding: 18px; gap: 14px; }
@@ -549,9 +538,10 @@ body { font-family: "Work Sans", sans-serif; }
 .cinema-item span { min-width: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font: 600 12px/1.35 "Work Sans", sans-serif; }
 
 @media (max-width: 640px) {
-  .tv-hit-label { left: 10px; bottom: 10px; padding: 9px 12px; font-size: 11px; }
-  .tv-hit-label small { display: none; }
-  .tv-channels { margin-left: 8px; gap: 6px; }
+  .tv-controls { flex-wrap: wrap; gap: 10px; }
+  .tv-now { order: 3; flex-basis: 100%; }
+  .tv-channels { margin-left: auto; }
+  .tv-channels { gap: 6px; }
   .tv-channels > span { display: none; }
   .tv-channel { width: 36px; height: 36px; }
   .portfolio-toolbar .play-all { width: 100%; }
@@ -561,3 +551,23 @@ body { font-family: "Work Sans", sans-serif; }
   .cinema-bar { justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) { .tv-flash { display: none; } }
+
+/* Fixes: nothing sits on top of the edit while it plays, and the cover image never swaps to a different frame. */
+.tv-controls { gap: 14px; }
+.tv-watch { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--grape); color: var(--ink); border: 1px solid var(--grape); border-radius: 3px; font: 800 12px/1.2 "JetBrains Mono", monospace; cursor: pointer; transition: background .18s ease, transform .18s ease; }
+.tv-watch:hover { background: var(--violet-soft); border-color: var(--violet-soft); transform: translateY(-2px); }
+.tv-now { flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; }
+.tv-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tv-channels { margin-left: 0; }
+.tv-play { position: absolute; top: 50%; left: 50%; width: 62px; height: 62px; display: grid; place-items: center; border-radius: 50%; background: var(--grape); color: var(--ink); transform: translate(-50%, -50%) scale(.85); opacity: 0; transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
+.tv-hit:hover .tv-play, .tv-hit:focus-visible .tv-play { opacity: 1; transform: translate(-50%, -50%); }
+.video-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.preview-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity .2s ease; }
+.preview-video[data-live] { opacity: 1; }
+.video-thumb .level-chip, .video-flag { z-index: 2; pointer-events: none; transition: opacity .2s ease; }
+.video-card[data-previewing] .level-chip, .video-card[data-previewing] .video-flag { opacity: 0; }
+.video-flag { position: absolute; top: 10px; right: 10px; padding: 6px 8px; background: var(--grape); border: 1px solid var(--grape); border-radius: 3px; color: var(--ink); font: 800 10px/1 "JetBrains Mono", monospace; }
+.video-meta { display: flex; align-items: center; gap: 10px; }
+.video-duration { color: var(--muted-text); font: 600 10px/1 "JetBrains Mono", monospace; }
+.video-listen { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; color: var(--violet-soft); font: 600 11px/1 "JetBrains Mono", monospace; transition: color .18s ease; }
+.video-card:hover .video-listen { color: var(--cream); }
