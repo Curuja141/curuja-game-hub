@@ -1,3 +1,4 @@
+import { CursorTrail } from "@/components/portfolio/CursorTrail";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
@@ -31,5 +32,5 @@ export const Route = createFileRoute("/")({
 });
 function Index() {
   const [selectedService, setSelectedService] = useState("");
-  return <CinemaProvider><PointerEffects/><RevealObserver/><Navbar/><main><Hero/><Portfolio/><Skills/><Services onSelect={setSelectedService}/><Process/><About/><Contact selectedService={selectedService}/></main><Footer/><Toaster position="bottom-right" richColors/></CinemaProvider>;
+  return <CinemaProvider><PointerEffects/><CursorTrail/><RevealObserver/><Navbar/><main><Hero/><Portfolio/><Skills/><Services onSelect={setSelectedService}/><Process/><About/><Contact selectedService={selectedService}/></main><Footer/><Toaster position="bottom-right" richColors /></CinemaProvider>;
 }
