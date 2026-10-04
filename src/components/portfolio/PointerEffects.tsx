@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 
 // Mouse-tracking effects for desktop: a soft purple glow that follows the cursor, a trailing ring that
 // grows over things you can click (and says PLAY over videos), and a 3D tilt with a light reflection on cards.
-// Nothing here runs on touch screens or when the visitor asked for reduced motion.
+// Touch screens never send mouse events, so nothing starts there. With "reduce motion" on, the ring and glow still
+// follow the pointer, but the 3D tilt is off.
 
 type TiltRule = { selector: string; max: number; scale: number };
 const TILT_RULES: TiltRule[] = [
@@ -34,8 +35,8 @@ export function PointerEffects() {
     const glow = glowRef.current;
     const ring = ringRef.current;
     if (!glow || !ring) return;
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // No media-query gate: touch screens never send mouse events, so these effects simply never start there.
+    const calmQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const mouse = { x: 0, y: 0, seen: false };
     const glowPos = { x: 0, y: 0 };
@@ -54,7 +55,7 @@ export function PointerEffects() {
     const retarget = (target: Element | null) => {
       const covered = !target || !!target.closest(COVERED);
       let next: { el: HTMLElement; rule: TiltRule } | null = null;
-      if (target && !covered) {
+      if (target && !covered && !calmQuery.matches) {
         for (const rule of TILT_RULES) {
           const el = target.closest<HTMLElement>(rule.selector);
           if (el) { next = { el, rule }; break; }
