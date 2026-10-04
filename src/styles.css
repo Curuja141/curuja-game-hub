@@ -840,3 +840,25 @@ body {
   .desktop-nav a::after, .desktop-nav a.active::after, .desktop-nav a:hover::after, .desktop-nav a:focus-visible::after { transform: none; transition: opacity .15s ease; }
   .pause-menu a, .pause-menu a:active { transform: none; transition: background .15s ease, color .15s ease; }
 }
+
+/* ---------- Mouse tracking: cursor glow, trailing ring and card tilt (desktop with a mouse only) ---------- */
+.cursor-glow { position: fixed; top: 0; left: 0; z-index: -1; width: 760px; height: 760px; margin: -380px 0 0 -380px; border-radius: 50%; background: radial-gradient(circle closest-side, rgba(139, 105, 255, .22), rgba(139, 105, 255, .09) 45%, transparent); opacity: 0; transition: opacity .6s var(--ease-out); pointer-events: none; will-change: transform; }
+.cursor-glow[data-on] { opacity: 1; }
+.cursor-ring { --k: 1; --press: 1; position: fixed; top: 0; left: 0; z-index: 130; width: 0; height: 0; opacity: 0; transition: opacity .25s var(--ease-out); pointer-events: none; will-change: transform; }
+.cursor-ring[data-on] { opacity: 1; }
+.cursor-ring[data-kind="hidden"] { opacity: 0; }
+.cursor-ring[data-kind="link"] { --k: 1.55; }
+.cursor-ring[data-kind="video"] { --k: 2.4; }
+.cursor-ring[data-kind="text"] { --k: .35; }
+.cursor-ring[data-down] { --press: .84; }
+.cursor-ring-shape { position: absolute; top: -18px; left: -18px; width: 36px; height: 36px; box-sizing: border-box; border: 1.5px solid color-mix(in srgb, var(--violet-soft) 75%, transparent); border-radius: 50%; background: transparent; scale: calc(var(--k) * var(--press)); transition: scale .5s var(--spring), background-color .25s var(--ease-out), border-color .25s var(--ease-out); }
+.cursor-ring[data-kind="link"] .cursor-ring-shape { background: color-mix(in srgb, var(--violet-soft) 14%, transparent); }
+.cursor-ring[data-kind="video"] .cursor-ring-shape { background: color-mix(in srgb, var(--grape) 62%, transparent); border-color: color-mix(in srgb, var(--violet-soft) 85%, transparent); }
+.cursor-ring[data-kind="text"] .cursor-ring-shape { background: var(--violet-soft); }
+.cursor-ring-label { position: absolute; top: 0; left: 0; transform: translate(-50%, -50%); color: var(--cream); font: 700 10px/1 "JetBrains Mono", monospace; letter-spacing: .08em; opacity: 0; transition: opacity .2s var(--ease-out); }
+.cursor-ring[data-kind="video"] .cursor-ring-label { opacity: 1; }
+
+.service-card, .achievement { position: relative; }
+.video-thumb::after, .service-card::after, .achievement::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; background: radial-gradient(340px circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, .17), rgba(185, 162, 255, .08) 40%, transparent 65%); opacity: var(--glare-o, 0); pointer-events: none; }
+.video-thumb[data-tilting], .service-card[data-tilting], .achievement[data-tilting] { z-index: 2; transform: perspective(900px) rotateX(var(--tilt-rx, 0deg)) rotateY(var(--tilt-ry, 0deg)) scale(var(--tilt-s, 1)); box-shadow: 0 26px 50px -22px rgba(6, 3, 22, .8), 0 0 0 1px rgba(185, 162, 255, .2); transition: border-color .25s var(--ease-out), box-shadow .35s var(--ease-out); will-change: transform; }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-glow, .cursor-ring { display: none; } }
