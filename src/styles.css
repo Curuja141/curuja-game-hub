@@ -862,3 +862,17 @@ body {
 .video-thumb::after, .service-card::after, .achievement::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; background: radial-gradient(340px circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, .17), rgba(185, 162, 255, .08) 40%, transparent 65%); opacity: var(--glare-o, 0); pointer-events: none; }
 .video-thumb[data-tilting], .service-card[data-tilting], .achievement[data-tilting] { z-index: 2; transform: perspective(900px) rotateX(var(--tilt-rx, 0deg)) rotateY(var(--tilt-ry, 0deg)) scale(var(--tilt-s, 1)); box-shadow: 0 26px 50px -22px rgba(6, 3, 22, .8), 0 0 0 1px rgba(185, 162, 255, .2); transition: border-color .25s var(--ease-out), box-shadow .35s var(--ease-out); will-change: transform; }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-glow, .cursor-ring { display: none; } }
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-trail {
+    display: none;
+  }
+}
