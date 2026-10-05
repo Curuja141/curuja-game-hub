@@ -822,23 +822,44 @@ body {
 @supports (transition-timing-function: linear(0, 1)) {
   :root { --spring: linear(0.0, 0.045 2.3%, 0.163 4.5%, 0.325 6.8%, 0.508 9.1%, 0.691 11.4%, 0.859 13.6%, 0.999 15.9%, 1.107 18.2%, 1.181 20.5%, 1.222 22.7%, 1.234 25.0%, 1.223 27.3%, 1.195 29.5%, 1.157 31.8%, 1.114 34.1%, 1.071 36.4%, 1.032 38.6%, 1.0 40.9%, 0.975 43.2%, 0.958 45.5%, 0.948 47.7%, 0.945 50.0%, 0.948 52.3%, 0.955 54.5%, 0.964 56.8%, 0.974 59.1%, 0.984 61.4%, 0.993 63.6%, 1.0 65.9%, 1.006 68.2%, 1.01 70.5%, 1.012 72.7%, 1.013 75.0%, 1.012 77.3%, 1.011 79.5%, 1.008 81.8%, 1.006 84.1%, 1.004 86.4%, 1.002 88.6%, 1.0 90.9%, 0.999 93.2%, 0.998 95.5%, 0.997 97.7%, 1); } /* real spring curve: overshoots, dips back, then settles */
 }
-.desktop-nav a { position: relative; isolation: isolate; -webkit-tap-highlight-color: transparent; transition: color .25s var(--ease-out), transform .3s var(--ease-out); }
+.desktop-nav a { position: relative; isolation: isolate; -webkit-tap-highlight-color: transparent; transform: none; transition: color .25s var(--ease-out), transform .38s var(--ease-out); }
 .desktop-nav a::before { content: ""; position: absolute; z-index: -1; inset: 2px -6px; border-radius: 9px; background: color-mix(in srgb, var(--violet-soft) 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--violet-soft) 34%, transparent), 0 8px 22px color-mix(in srgb, var(--grape) 30%, transparent); opacity: 0; transform: scale(.6); transition: transform .3s var(--ease-out), opacity .22s var(--ease-out); }
 .desktop-nav a::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 20px; height: 2px; margin-left: -10px; border-radius: 2px; background: var(--violet-soft); opacity: 0; transform: scaleX(0); transition: transform .3s var(--ease-out), opacity .2s var(--ease-out); }
 .desktop-nav a.active { color: var(--cream); box-shadow: none; }
 .desktop-nav a.active::after { opacity: 1; transform: scaleX(1); transition: transform .7s var(--spring), opacity .2s var(--ease-out); }
-.desktop-nav a:hover, .desktop-nav a:focus-visible { color: var(--cream); box-shadow: none; transform: translateY(-3px) scale(1.04); transition: color .2s var(--ease-out), transform .7s var(--spring); }
+/* The pop is written with `transform` (not the standalone `scale`/`translate` properties) on purpose:
+   the reduced-motion block below neutralises it with `transform: none`, which only overrides the same property. */
+@keyframes nav-pop { /* grow past the resting size, ease back down: the soft "bigger then smaller" feel */
+  0% { transform: translateY(0) scale(1); }
+  42% { transform: translateY(-7px) scale(1.16); }
+  74% { transform: translateY(-3px) scale(1.03); }
+  100% { transform: translateY(-5px) scale(1.08); }
+}
+.desktop-nav a:hover, .desktop-nav a:focus-visible { color: var(--cream); box-shadow: none; transform: translateY(-5px) scale(1.08); animation: nav-pop .55s var(--ease-out) both; transition: color .2s var(--ease-out), transform .4s var(--ease-out); }
 .desktop-nav a:hover::before, .desktop-nav a:focus-visible::before { opacity: 1; transform: scale(1); transition: transform .7s var(--spring), opacity .18s var(--ease-out); }
 .desktop-nav a:hover::after, .desktop-nav a:focus-visible::after { opacity: 1; transform: scaleX(1); transition: transform .7s var(--spring) .05s, opacity .2s var(--ease-out); }
-.desktop-nav a:active { transform: translateY(0) scale(.93); transition: color .2s var(--ease-out), transform .12s var(--ease-out); }
+.desktop-nav a:active { animation: none; transform: translateY(0) scale(.95); transition: color .2s var(--ease-out), transform .12s var(--ease-out); }
 .desktop-nav a:active::before { transform: scale(.94); transition: transform .12s var(--ease-out), opacity .18s var(--ease-out); }
-.pause-menu a { transition: transform .6s var(--spring), background .2s var(--ease-out), color .2s var(--ease-out); }
-.pause-menu a:active { transform: scale(.97); background: var(--surface); transition: transform .12s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out); }
+@keyframes pause-pop { 0% { transform: scale(1); } 45% { transform: scale(1.045); } 100% { transform: scale(1.02); } }
+.pause-menu a { transition: transform .4s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out); }
+.pause-menu a:hover, .pause-menu a:focus-visible { animation: pause-pop .5s var(--ease-out) both; background: var(--surface); }
+.pause-menu a:active { animation: none; transform: scale(.98); background: var(--surface); transition: transform .12s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out); }
+/* When the pointer leaves, the tab eases back down instead of snapping: the hover animation is gone,
+   so a short class-driven animation plays the "smaller then normal" tail. */
+@keyframes nav-out {
+  0% { transform: translateY(-5px) scale(1.08); }
+  40% { transform: translateY(-1px) scale(.965); }
+  100% { transform: translateY(0) scale(1); }
+}
+.desktop-nav a.nav-out { animation: nav-out .42s var(--ease-out) both; }
+@keyframes pause-out { 0% { transform: scale(1.02); } 45% { transform: scale(.985); } 100% { transform: scale(1); } }
+.pause-menu a.nav-out { animation: pause-out .32s var(--ease-out) both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .desktop-nav a, .desktop-nav a:hover, .desktop-nav a:focus-visible, .desktop-nav a:active { transform: none; transition: color .15s ease; }
+  .desktop-nav a, .desktop-nav a.nav-out, .desktop-nav a:hover, .desktop-nav a:focus-visible, .desktop-nav a:active { animation: none; transform: none; transition: color .15s ease; }
   .desktop-nav a::before, .desktop-nav a:hover::before, .desktop-nav a:focus-visible::before, .desktop-nav a:active::before { transform: none; transition: opacity .15s ease; }
   .desktop-nav a::after, .desktop-nav a.active::after, .desktop-nav a:hover::after, .desktop-nav a:focus-visible::after { transform: none; transition: opacity .15s ease; }
-  .pause-menu a, .pause-menu a:active { transform: none; transition: background .15s ease, color .15s ease; }
+  .pause-menu a, .pause-menu a.nav-out, .pause-menu a:hover, .pause-menu a:focus-visible, .pause-menu a:active { animation: none; transform: none; transition: background .15s ease, color .15s ease; }
 }
 
 /* ---------- Mouse tracking: cursor glow, trailing ring and card tilt (desktop with a mouse only) ---------- */
