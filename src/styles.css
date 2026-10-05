@@ -842,11 +842,22 @@ body {
 .pause-menu a { transition: scale .4s var(--ease-out), translate .4s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out); }
 .pause-menu a:hover, .pause-menu a:focus-visible { animation: pause-pop .5s var(--ease-out) both; background: var(--surface); }
 .pause-menu a:active { animation: none; scale: .98; background: var(--surface); transition: scale .12s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out); }
+/* When the pointer leaves, the tab eases back down instead of snapping: the hover animation is gone,
+   so a short class-driven animation plays the "smaller then normal" tail. */
+@keyframes nav-out {
+  0% { scale: 1.08; translate: 0 -5px; }
+  40% { scale: .965; translate: 0 -1px; }
+  100% { scale: 1; translate: 0 0; }
+}
+.desktop-nav a.nav-out { animation: nav-out .42s var(--ease-out) both; }
+@keyframes pause-out { 0% { scale: 1.02; } 45% { scale: .985; } 100% { scale: 1; } }
+.pause-menu a.nav-out { animation: pause-out .32s var(--ease-out) both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .desktop-nav a, .desktop-nav a:hover, .desktop-nav a:focus-visible, .desktop-nav a:active { animation: none; transform: none; scale: 1; translate: none; transition: color .15s ease; }
+  .desktop-nav a, .desktop-nav a.nav-out, .desktop-nav a:hover, .desktop-nav a:focus-visible, .desktop-nav a:active { animation: none; transform: none; scale: 1; translate: none; transition: color .15s ease; }
   .desktop-nav a::before, .desktop-nav a:hover::before, .desktop-nav a:focus-visible::before, .desktop-nav a:active::before { transform: none; transition: opacity .15s ease; }
   .desktop-nav a::after, .desktop-nav a.active::after, .desktop-nav a:hover::after, .desktop-nav a:focus-visible::after { transform: none; transition: opacity .15s ease; }
-  .pause-menu a, .pause-menu a:hover, .pause-menu a:focus-visible, .pause-menu a:active { animation: none; transform: none; scale: 1; translate: none; transition: background .15s ease, color .15s ease; }
+  .pause-menu a, .pause-menu a.nav-out, .pause-menu a:hover, .pause-menu a:focus-visible, .pause-menu a:active { animation: none; transform: none; scale: 1; translate: none; transition: background .15s ease, color .15s ease; }
 }
 
 /* ---------- Mouse tracking: cursor glow, trailing ring and card tilt (desktop with a mouse only) ---------- */

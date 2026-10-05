@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { Heart, Menu, X } from "lucide-react";
 import { navItems } from "@/data/site";
 import { ArcadeButton, OwlMascot } from "./GamePieces";
@@ -21,6 +21,14 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", update);
   }, []);
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
+  // The hover pop is a CSS animation; when it is removed the tab would snap back to normal size,
+  // so we play a short "nav-out" tail instead. Clearing the class on enter keeps re-hovers crisp.
+  const clearPop = (e: MouseEvent<HTMLAnchorElement>) => e.currentTarget.classList.remove("nav-out");
+  const playPopOut = (e: MouseEvent<HTMLAnchorElement>) => {
+    const el = e.currentTarget;
+    el.classList.add("nav-out");
+    window.setTimeout(() => el.classList.remove("nav-out"), 430);
+  };
   return <header className="site-nav">
     <div className="nav-inner">
       <a href="#home" className="brand" aria-label="Curuja, back to start" onClick={() => setOpen(false)}><OwlMascot id="nav-owl" /><span>CURUJA</span></a>
