@@ -871,3 +871,15 @@ body {
 }
 
 
+
+/* Hover bounce: uses the standalone `scale` property so it never fights the existing transform/tilt effects. */
+@keyframes hover-bounce { 0% { scale: 1; } 35% { scale: 1.045; } 60% { scale: 1.015; } 80% { scale: 1.03; } 100% { scale: 1.025; } }
+:is(.arcade-button, .video-card, .service-card, .achievement:not(.locked), .process-copy, .inventory-slot.filled, .contact-links a, .nav-hire, .profile-card) { scale: 1; transition: scale .35s cubic-bezier(.22,1,.36,1); }
+:is(.video-details, .service-card, .achievement, .process-copy, .contact-links a) :is(h3, p, strong, small, .video-meta, .service-number, .achievement-state) { transform-origin: left center; transition: scale .35s cubic-bezier(.22,1,.36,1); }
+.service-card :is(h3, p, .service-number) { transform-origin: center; }
+@media (hover: hover) {
+  :is(.arcade-button, .video-card, .service-card, .achievement:not(.locked), .process-copy, .inventory-slot.filled, .contact-links a, .nav-hire):hover { animation: hover-bounce .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+  :is(.video-card, .service-card, .achievement:not(.locked), .process-copy, .contact-links a):hover :is(h3, p, strong, small, .video-meta, .service-number, .achievement-state) { scale: 1.06; }
+}
+:is(.arcade-button, .service-card, .video-card, .contact-links a):active { animation: none; scale: .98; transition-duration: .12s; }
+@media (prefers-reduced-motion: reduce) { :is(.arcade-button, .video-card, .service-card, .achievement, .process-copy, .inventory-slot, .contact-links a, .nav-hire):hover { animation: none !important; } }
