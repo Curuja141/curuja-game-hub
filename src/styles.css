@@ -890,29 +890,3 @@ body {
   height: 100%;
   pointer-events: none;
 }
-
-
-
-/* Hover spring: real spring curves via linear() (stiffness ~400, damping ~12, mass ~0.6). Uses the standalone `scale`
-   property so it never fights existing transform/tilt effects. Enter = underdamped (small overshoot); leave = critically damped (no second bounce). */
-:root {
-  --spring-enter: cubic-bezier(.34, 1.56, .64, 1);
-  --spring-leave: cubic-bezier(.22, 1, .36, 1);
-}
-@supports (transition-timing-function: linear(0, 1)) {
-  :root {
-    --spring-enter: linear(0, 0.096 3%, 0.334 7%, 0.632 12%, 0.872 17%, 1.04 22%, 1.13 27%, 1.155 31%, 1.14 35%, 1.1 40%, 1.05 46%, 1.012 52%, 0.99 58%, 0.983 63%, 0.986 69%, 0.995 77%, 1.001 86%, 1);
-    --spring-leave: linear(0, 0.15 4%, 0.42 10%, 0.66 17%, 0.82 25%, 0.92 34%, 0.965 43%, 0.988 55%, 0.997 70%, 1);
-  }
-}
-:is(.arcade-button, .video-card, .service-card, .achievement:not(.locked), .process-copy, .inventory-slot.filled, .contact-links a, .nav-hire) { scale: 1; transition: scale .45s var(--spring-leave); }
-:is(.video-details, .service-card, .achievement, .process-copy, .contact-links a) :is(h3, p, strong, small, .video-meta, .service-number, .achievement-state) { transform-origin: left center; transition: scale .45s var(--spring-leave); }
-.service-card :is(h3, p, .service-number) { transform-origin: center; }
-@media (hover: hover) {
-  :is(.arcade-button, .video-card, .service-card, .achievement:not(.locked), .process-copy, .inventory-slot.filled, .contact-links a, .nav-hire):hover { scale: 1.03; transition: scale .6s var(--spring-enter); }
-  :is(.video-card, .service-card, .achievement:not(.locked), .process-copy, .contact-links a):hover :is(h3, p, strong, small, .video-meta, .service-number, .achievement-state) { scale: 1.06; transition: scale .65s var(--spring-enter) .02s; }
-}
-:is(.arcade-button, .service-card, .video-card, .contact-links a):active { scale: .98; transition: scale .12s var(--spring-leave); }
-@media (prefers-reduced-motion: reduce) {
-  :is(.arcade-button, .video-card, .service-card, .achievement, .process-copy, .inventory-slot, .contact-links a, .nav-hire), :is(.arcade-button, .video-card, .service-card, .achievement, .process-copy, .inventory-slot, .contact-links a, .nav-hire) * { scale: 1 !important; transition-duration: .01ms !important; }
-}

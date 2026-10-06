@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { startHoverSprings } from "@/lib/hover-springs";
 
 // Mouse-tracking effects for desktop: a soft purple glow that follows the cursor, a trailing ring that
 // grows over things you can click (and says PLAY over videos), and a 3D tilt with a light reflection on cards.
@@ -7,9 +8,9 @@ import { useEffect, useRef } from "react";
 
 type TiltRule = { selector: string; max: number; scale: number };
 const TILT_RULES: TiltRule[] = [
-  { selector: ".video-thumb", max: 9, scale: 1.025 },
-  { selector: ".service-card", max: 6, scale: 1.02 },
-  { selector: ".achievement:not(.locked)", max: 5, scale: 1.02 },
+  { selector: ".video-thumb", max: 9, scale: 1 },
+  { selector: ".service-card", max: 6, scale: 1 },
+  { selector: ".achievement:not(.locked)", max: 5, scale: 1 },
 ];
 const PLAYABLE = ".video-thumb, .tv-hit";
 const TEXT_FIELDS = "input:not([type='checkbox']):not([type='radio']), textarea";
@@ -30,6 +31,9 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 export function PointerEffects() {
   const glowRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+
+  // Spring-physics hover (scale + text scale) for every interaction box; see src/lib/hover-springs.ts
+  useEffect(() => startHoverSprings(), []);
 
   useEffect(() => {
     const glow = glowRef.current;

@@ -101,7 +101,7 @@ export function CursorTrail() {
 
       if (!calmQuery.matches) {
         ripples.forEach(ripple => {
-          const k = (now - ripple.t) / RIPPLE;
+          const k = Math.min(Math.max((now - ripple.t) / RIPPLE, 0), 1); // a click can land a few ms after the frame timestamp
           const eased = 1 - Math.pow(1 - k, 3);
           ctx.strokeStyle = `rgba(196, 176, 255, ${(0.55 * (1 - k)).toFixed(3)})`;
           ctx.lineWidth = 2.2 * (1 - k) + 0.4;
